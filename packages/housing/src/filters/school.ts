@@ -1,0 +1,438 @@
+import type { State } from '@/state';
+import type { FilterOption } from './option';
+
+interface SchoolCategory {
+    regionId: number,
+    regionName: string,
+    schools: SchoolFilter[]
+}
+
+interface SchoolFilter {
+    id: number;
+    name: string;
+}
+
+const SCHOOL: SchoolCategory[] = [{
+    regionId: 1,
+    regionName: "台北市",
+    schools: [{
+        id: 191,
+        name: "台灣大學"
+    }, {
+        id: 272,
+        name: "東吳大學"
+    }, {
+        id: 401,
+        name: "政治大學"
+    }, {
+        id: 137,
+        name: "大同大學"
+    }, {
+        id: 314,
+        name: "陽明大學"
+    }, {
+        id: 273,
+        name: "銘傳大學"
+    }, {
+        id: 397,
+        name: "世新大學"
+    }, {
+        id: 140,
+        name: "實踐大學"
+    }, {
+        id: 233,
+        name: "台北醫學大學"
+    }, {
+        id: 269,
+        name: "中國文化大學"
+    }, {
+        id: 4869,
+        name: "中國科技大學"
+    }, {
+        id: 193,
+        name: "台灣師範大學"
+    }, {
+        id: 192,
+        name: "台灣科技大學"
+    }, {
+        id: 189,
+        name: "台北科技大學"
+    }, {
+        id: 308,
+        name: "台北藝術大學"
+    }, {
+        id: 7429,
+        name: "台灣戲曲學院"
+    }, {
+        id: 7404,
+        name: "國立台北教育大學"
+    }, {
+        id: 94,
+        name: "台北商業大學"
+    }]
+}, {
+    regionId: 8,
+    regionName: "台中市",
+    schools: [{
+        id: 1398,
+        name: "中興大學"
+    }, {
+        id: 1480,
+        name: "東海大學"
+    }, {
+        id: 1481,
+        name: "逢甲大學"
+    }, {
+        id: 1430,
+        name: "中國醫藥大學"
+    }, {
+        id: 1397,
+        name: "中山醫學大學"
+    }, {
+        id: 1482,
+        name: "僑光科技大學"
+    }, {
+        id: 7400,
+        name: "台中教育大學"
+    }, {
+        id: 1432,
+        name: "台灣體育運動大學"
+    }, {
+        id: 6657,
+        name: "嶺東科技大學"
+    }, {
+        id: 1431,
+        name: "台中科技大學"
+    }, {
+        id: 28891,
+        name: "中台科技大學"
+    }, {
+        id: 7432,
+        name: "亞洲大學"
+    }, {
+        id: 1682,
+        name: "弘光科技大學"
+    }, {
+        id: 1683,
+        name: "靜宜大學"
+    }, {
+        id: 1521,
+        name: "勤益科技大學"
+    }, {
+        id: 66356,
+        name: "中國醫藥大學水湳校區"
+    }]
+}, {
+    regionId: 15,
+    regionName: "台南市",
+    schools: [{
+        id: 2670,
+        name: "成功大學"
+    }, {
+        id: 7410,
+        name: "國立台南大學"
+    }, {
+        id: 2745,
+        name: "康寧大學"
+    }, {
+        id: 2774,
+        name: "長榮大學"
+    }, {
+        id: 2846,
+        name: "台灣首府大學"
+    }, {
+        id: 2765,
+        name: "南台科技大學"
+    }, {
+        id: 2766,
+        name: "崑山科技大學"
+    }, {
+        id: 7434,
+        name: "台南應用科技大學"
+    }, {
+        id: 2815,
+        name: "嘉南藥理大學"
+    }, {
+        id: 37481,
+        name: "中華醫事科技大學"
+    }]
+}, {
+    regionId: 17,
+    regionName: "高雄市",
+    schools: [{
+        id: 3065,
+        name: "中山大學"
+    }, {
+        id: 3159,
+        name: "高雄餐旅大學"
+    }, {
+        id: 3120,
+        name: "高雄醫學大學"
+    }, {
+        id: 3046,
+        name: "高雄師範大學"
+    }, {
+        id: 3138,
+        name: "國立高雄大學"
+    }, {
+        id: 27632,
+        name: "文藻外語學院"
+    }, {
+        id: 3137,
+        name: "高雄第一科技大學"
+    }, {
+        id: 3119,
+        name: "高雄應用科技大學"
+    }, {
+        id: 7574,
+        name: "國立高雄海洋科技大學"
+    }, {
+        id: 3355,
+        name: "義守大學"
+    }, {
+        id: 3245,
+        name: "樹德科技大學"
+    }, {
+        id: 3326,
+        name: "輔英科技大學"
+    }, {
+        id: 3340,
+        name: "正修科技大學"
+    }, {
+        id: 66296,
+        name: "高苑科技大學"
+    }, {
+        id: 66297,
+        name: "東方設計學院"
+    }]
+}, {
+    regionId: 6,
+    regionName: "桃園市",
+    schools: [{
+        id: 837,
+        name: "中原大學"
+    }, {
+        id: 836,
+        name: "中央大學"
+    }, {
+        id: 956,
+        name: "長庚大學"
+    }, {
+        id: 958,
+        name: "銘傳大學桃園校區"
+    }, {
+        id: 960,
+        name: "體育大學"
+    }, {
+        id: 838,
+        name: "元智大學"
+    }, {
+        id: 7425,
+        name: "開南大學"
+    }, {
+        id: 839,
+        name: "桃園創新技術學院"
+    }, {
+        id: 959,
+        name: "龍華科技大學"
+    }, {
+        id: 841,
+        name: "萬能科技大學"
+    }, {
+        id: 840,
+        name: "健行科技大學"
+    }]
+}, {
+    regionId: 4,
+    regionName: "新竹市",
+    schools: [{
+        id: 1070,
+        name: "清華大學"
+    }, {
+        id: 1068,
+        name: "交通大學"
+    }, {
+        id: 1097,
+        name: "中華大學"
+    }, {
+        id: 1099,
+        name: "玄奘大學"
+    }, {
+        id: 6743,
+        name: "國立清華大學南大校區"
+    }, {
+        id: 7424,
+        name: "元培醫事科技大學"
+    }]
+}, {
+    regionId: 3,
+    regionName: "新北市",
+    schools: [{
+        id: 755,
+        name: "淡江大學"
+    }, {
+        id: 687,
+        name: "輔仁大學"
+    }, {
+        id: 480,
+        name: "華梵大學"
+    }, {
+        id: 753,
+        name: "真理大學"
+    }, {
+        id: 450,
+        name: "台灣藝術大學"
+    }, {
+        id: 6237,
+        name: "明志科技大學"
+    }, {
+        id: 7430,
+        name: "景文科技大學"
+    }, {
+        id: 452,
+        name: "致理技術學院"
+    }, {
+        id: 709,
+        name: "醒吾科技大學"
+    }, {
+        id: 451,
+        name: "亞東技術學院"
+    }, {
+        id: 473,
+        name: "東南科技大學"
+    }, {
+        id: 592,
+        name: "德霖技術學院"
+    }, {
+        id: 696,
+        name: "黎明技術學院"
+    }, {
+        id: 6208,
+        name: "華夏科技大學"
+    }, {
+        id: 8245,
+        name: "台北大學三峽校區"
+    }]
+}, {
+    regionId: 2,
+    regionName: "基隆市",
+    schools: [{
+        id: 30,
+        name: "台灣海洋大學"
+    }]
+}, {
+    regionId: 10,
+    regionName: "彰化縣",
+    schools: [{
+        id: 1770,
+        name: "彰化師範大學"
+    }, {
+        id: 1769,
+        name: "建國科技大學"
+    }, {
+        id: 1888,
+        name: "大葉大學"
+    }, {
+        id: 35664,
+        name: "明道大學"
+    }]
+}, {
+    regionId: 23,
+    regionName: "花蓮縣",
+    schools: [{
+        id: 3834,
+        name: "慈濟大學"
+    }, {
+        id: 3884,
+        name: "東華大學"
+    }, {
+        id: 3835,
+        name: "慈濟技術學院"
+    }]
+}, {
+    regionId: 19,
+    regionName: "屏東縣",
+    schools: [{
+        id: 3537,
+        name: "屏東科技大學"
+    }, {
+        id: 7414,
+        name: "屏東大學"
+    }]
+}, {
+    regionId: 12,
+    regionName: "嘉義市",
+    schools: [{
+        id: 2441,
+        name: "嘉義大學"
+    }]
+}, {
+    regionId: 22,
+    regionName: "台東縣",
+    schools: [{
+        id: 7423,
+        name: "台東大學"
+    }]
+}, {
+    regionId: 13,
+    regionName: "嘉義縣",
+    schools: [{
+        id: 2604,
+        name: "中正大學"
+    }]
+}, {
+    regionId: 11,
+    regionName: "南投縣",
+    schools: [{
+        id: 2072,
+        name: "暨南國際大學"
+    }]
+}, {
+    regionId: 14,
+    regionName: "雲林縣",
+    schools: [{
+        id: 2277,
+        name: "雲林科技大學"
+    }, {
+        id: 7427,
+        name: "虎尾科技大學"
+    }]
+}, {
+    regionId: 21,
+    regionName: "宜蘭縣",
+    schools: [{
+        id: 3696,
+        name: "宜蘭大學"
+    }, {
+        id: 7433,
+        name: "佛光大學"
+    }]
+}, {
+    regionId: 7,
+    regionName: "苗栗縣",
+    schools: [{
+        id: 7426,
+        name: "聯合大學"
+    }]
+}, {
+    regionId: 5,
+    regionName: "新竹縣",
+    schools: [{
+        id: 1140,
+        name: "明新科技大學"
+    }]
+}];
+
+export function getSchoolList(state: State): FilterOption[] {
+    const { region } = state;
+    return SCHOOL.filter(school => school.regionId.toFixed() === region)
+        .map(school => school.schools)
+        .flat()
+        .map(school => {
+            return {
+                id: school.id.toString(),
+                key: 'school',
+                name: school.name
+            };
+        });
+}

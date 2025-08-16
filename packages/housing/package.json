@@ -1,0 +1,23 @@
+{
+  "name": "housing_filters",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build:esbuild": "node esbuild.config.js",
+    "build:types": "tsc -p tsconfig.build.json",
+    "build": "npm run build:esbuild && npm run build:types",
+    "lint": "eslint src",
+    "watch": "node esbuild.config.js --watch"
+  },
+  "author": "JC",
+  "license": "MIT",
+  "type": "module",
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.1"
+  }
+}

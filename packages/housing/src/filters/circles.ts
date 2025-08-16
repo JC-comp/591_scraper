@@ -1,0 +1,847 @@
+import type { State } from '@/state';
+import type { FilterOption } from './option';
+import { getFilterAllOption } from './function';
+
+interface CircleCategory {
+    regionId: number,
+    regionName: string,
+    circles: CircleFilter[]
+}
+
+interface CircleFilter {
+    id: number;
+    name: string;
+}
+
+const NEW_CIRCLES: CircleCategory[] = [
+    {
+        "regionId": 1,
+        "regionName": "台北市",
+        "circles": [
+            {
+                "id": 1,
+                "name": "信義基隆區"
+            },
+            {
+                "id": 2,
+                "name": "民生敦北區"
+            },
+            {
+                "id": 3,
+                "name": "南港經貿園區"
+            },
+            {
+                "id": 4,
+                "name": "台北車站區"
+            },
+            {
+                "id": 5,
+                "name": "古亭商圈"
+            },
+            {
+                "id": 6,
+                "name": "南京松江區"
+            },
+            {
+                "id": 7,
+                "name": "南京光復區"
+            },
+            {
+                "id": 8,
+                "name": "內湖科學園區"
+            },
+            {
+                "id": 9,
+                "name": "內湖第五期重劃區"
+            },
+            {
+                "id": 10,
+                "name": "大灣南段工業區"
+            },
+            {
+                "id": 11,
+                "name": "敦化南路區"
+            },
+            {
+                "id": 12,
+                "name": "中山北路區"
+            }
+        ]
+    }
+];
+
+const CIRCLES: CircleCategory[] = [{
+    regionId: 1,
+    regionName: "台北市",
+    circles: [{
+        id: 22309,
+        name: "內湖科技園區"
+    }, {
+        id: 22310,
+        name: "南港軟體工業園區"
+    }, {
+        id: 22175,
+        name: "萬華商圈"
+    }, {
+        id: 22180,
+        name: "天母商圈"
+    }, {
+        id: 22184,
+        name: "通化商圈"
+    }, {
+        id: 22187,
+        name: "雙城商圈"
+    }, {
+        id: 22415,
+        name: "景美商圈"
+    }, {
+        id: 26499,
+        name: "信義商圈"
+    }, {
+        id: 46300,
+        name: "師大商圈"
+    }, {
+        id: 22186,
+        name: "五分埔商圈"
+    }, {
+        id: 22183,
+        name: "忠孝SOGO商圈"
+    }, {
+        id: 22173,
+        name: "政大萬興商圈"
+    }, {
+        id: 22179,
+        name: "師大永康商圈"
+    }, {
+        id: 22181,
+        name: "士林夜市商圈"
+    }, {
+        id: 22185,
+        name: "台大公館商圈"
+    }, {
+        id: 22189,
+        name: "四平陽光商圈"
+    }, {
+        id: 22190,
+        name: "南昌家具商圈"
+    }, {
+        id: 52828,
+        name: "民生東路商圈"
+    }, {
+        id: 22176,
+        name: "西門徒步區商圈"
+    }, {
+        id: 22178,
+        name: "沅陵街城內商圈"
+    }, {
+        id: 22182,
+        name: "新北投溫泉商圈"
+    }, {
+        id: 26498,
+        name: "南港家樂福商圈"
+    }, {
+        id: 22174,
+        name: "華陰後火車站商圈"
+    }, {
+        id: 22177,
+        name: "中山北路婚紗商圈"
+    }, {
+        id: 22188,
+        name: "愛國東路婚紗商圈"
+    }]
+}, {
+    regionId: 8,
+    regionName: "台中市",
+    circles: [{
+        id: 22356,
+        name: "台中工業區"
+    }, {
+        id: 22316,
+        name: "中科台中園區"
+    }, {
+        id: 22238,
+        name: "一中商圈"
+    }, {
+        id: 22233,
+        name: "大隆路商圈"
+    }, {
+        id: 22240,
+        name: "自由路商圈"
+    }, {
+        id: 22232,
+        name: "大坑圓環商圈"
+    }, {
+        id: 22234,
+        name: "精明一街商圈"
+    }, {
+        id: 22236,
+        name: "美術園道商圈"
+    }, {
+        id: 22239,
+        name: "逢甲夜市商圈"
+    }, {
+        id: 22241,
+        name: "台中大墩商圈"
+    }, {
+        id: 22242,
+        name: "台中中科商圈"
+    }, {
+        id: 22231,
+        name: "天津路服飾商圈"
+    }, {
+        id: 22235,
+        name: "台中電子街商圈"
+    }, {
+        id: 22237,
+        name: "繼光商店街商圈"
+    }, {
+        id: 22353,
+        name: "大里工業區"
+    }, {
+        id: 22317,
+        name: "中科台中園區"
+    }, {
+        id: 22318,
+        name: "中科后里園區"
+    }, {
+        id: 40890,
+        name: "后里科學園區"
+    }, {
+        id: 22354,
+        name: "台中幼獅工業區"
+    }, {
+        id: 22355,
+        name: "台中港關連工業區"
+    }, {
+        id: 22246,
+        name: "霧峰鄉商圈"
+    }, {
+        id: 22247,
+        name: "東勢鎮商圈"
+    }, {
+        id: 22243,
+        name: "豐原復興路商圈"
+    }, {
+        id: 22244,
+        name: "太平市樹孝路商圈"
+    }, {
+        id: 22245,
+        name: "梧棲鎮舶來品商圈"
+    }, {
+        id: 66295,
+        name: "靜宜商圈"
+    }]
+}, {
+    regionId: 15,
+    regionName: "台南市",
+    circles: [{
+        id: 22375,
+        name: "安平工業區"
+    }, {
+        id: 22320,
+        name: "台南科技工業區"
+    }, {
+        id: 22250,
+        name: "安平商圈"
+    }, {
+        id: 22248,
+        name: "三星世界商圈"
+    }, {
+        id: 22249,
+        name: "台南中正路商圈"
+    }, {
+        id: 22372,
+        name: "永康工業區"
+    }, {
+        id: 22373,
+        name: "官田工業區"
+    }, {
+        id: 22374,
+        name: "新營工業區"
+    }, {
+        id: 22321,
+        name: "台南科學園區"
+    }, {
+        id: 22252,
+        name: "麻豆鎮商圈"
+    }, {
+        id: 22253,
+        name: "新營市魅力商圈"
+    }, {
+        id: 22251,
+        name: "新化鎮大目降商圈"
+    }]
+}, {
+    regionId: 17,
+    regionName: "高雄市",
+    circles: [{
+        id: 22378,
+        name: "鳳山工業區"
+    }, {
+        id: 22383,
+        name: "高雄市臨海工業區"
+    }, {
+        id: 22258,
+        name: "長明商圈"
+    }, {
+        id: 22261,
+        name: "後驛商圈"
+    }, {
+        id: 22267,
+        name: "明誠商圈"
+    }, {
+        id: 22268,
+        name: "瑞峰商圈"
+    }, {
+        id: 22270,
+        name: "崇德商圈"
+    }, {
+        id: 22271,
+        name: "愛河商圈"
+    }, {
+        id: 22273,
+        name: "三多商圈"
+    }, {
+        id: 22255,
+        name: "新堀江商圈"
+    }, {
+        id: 22269,
+        name: "美術館商圈"
+    }, {
+        id: 22257,
+        name: "中心魅力商圈"
+    }, {
+        id: 22262,
+        name: "南華觀光商場"
+    }, {
+        id: 22272,
+        name: "漢神大立商圈"
+    }, {
+        id: 22256,
+        name: "大連街形象商圈"
+    }, {
+        id: 22259,
+        name: "興中花卉街商圈"
+    }, {
+        id: 22254,
+        name: "三鳳中街形象商圈"
+    }, {
+        id: 22260,
+        name: "鹽埕堀江商場商圈"
+    }, {
+        id: 22263,
+        name: "六合觀光夜市商圈"
+    }, {
+        id: 22264,
+        name: "興中觀光夜市商圈"
+    }, {
+        id: 22265,
+        name: "光華觀光夜市商圈"
+    }, {
+        id: 22266,
+        name: "忠孝觀光夜市商圈"
+    }, {
+        id: 22376,
+        name: "大發工業區"
+    }, {
+        id: 22377,
+        name: "鳳山工業區"
+    }, {
+        id: 22379,
+        name: "大社工業區"
+    }, {
+        id: 22380,
+        name: "仁武工業區"
+    }, {
+        id: 22381,
+        name: "永安工業區"
+    }, {
+        id: 22382,
+        name: "林園工業區"
+    }, {
+        id: 22322,
+        name: "高雄科學園區"
+    }, {
+        id: 22275,
+        name: "甲仙鄉形象商圈"
+    }, {
+        id: 22274,
+        name: "旗山鎮中山路商圈"
+    }, {
+        id: 22276,
+        name: "鳳山市三民路商圈"
+    }]
+}, {
+    regionId: 6,
+    regionName: "桃園市",
+    circles: [{
+        id: 22337,
+        name: "大園工業區"
+    }, {
+        id: 22338,
+        name: "中壢工業區"
+    }, {
+        id: 22339,
+        name: "平鎮工業區"
+    }, {
+        id: 22341,
+        name: "觀音工業區"
+    }, {
+        id: 22342,
+        name: "龜山工業區"
+    }, {
+        id: 22324,
+        name: "龍潭渴望園區"
+    }, {
+        id: 22340,
+        name: "桃園幼獅工業區"
+    }, {
+        id: 22345,
+        name: "林口工[三]工業區"
+    }, {
+        id: 22346,
+        name: "林口工[四]工業區"
+    }, {
+        id: 22312,
+        name: "林口華亞科技園區"
+    }, {
+        id: 22216,
+        name: "雅典商圈"
+    }, {
+        id: 22217,
+        name: "大溪商圈"
+    }, {
+        id: 22218,
+        name: "角板山商圈"
+    }, {
+        id: 22219,
+        name: "大園鄉商圈"
+    }, {
+        id: 26501,
+        name: "中原大學商圈"
+    }, {
+        id: 26503,
+        name: "中壢夜市商圈"
+    }, {
+        id: 52829,
+        name: "林口長庚商圈"
+    }]
+}, {
+    regionId: 4,
+    regionName: "新竹市",
+    circles: [{
+        id: 22313,
+        name: "竹科工業園區"
+    }, {
+        id: 22221,
+        name: "東門形象商圈"
+    }, {
+        id: 22223,
+        name: "北門大街商圈"
+    }, {
+        id: 22224,
+        name: "清大夜市商圈"
+    }, {
+        id: 22222,
+        name: "新竹舊城區商圈"
+    }, {
+        id: 22225,
+        name: "新竹SOGO站前商圈"
+    }, {
+        id: 22226,
+        name: "湳雅街大潤發商圈"
+    }]
+}, {
+    regionId: 3,
+    regionName: "新北市",
+    circles: [{
+        id: 22408,
+        name: "湯城園區"
+    }, {
+        id: 22326,
+        name: "中和工業區"
+    }, {
+        id: 22327,
+        name: "新店工業區"
+    }, {
+        id: 22333,
+        name: "土城工業區"
+    }, {
+        id: 22334,
+        name: "五股工業區"
+    }, {
+        id: 22335,
+        name: "瑞芳工業區"
+    }, {
+        id: 22336,
+        name: "樹林工業區"
+    }, {
+        id: 22343,
+        name: "龜山工業區"
+    }, {
+        id: 22344,
+        name: "林口工[二]工業區"
+    }, {
+        id: 22311,
+        name: "南港軟體工業園區"
+    }, {
+        id: 22414,
+        name: "汐止東方科學園區"
+    }, {
+        id: 22192,
+        name: "烏來商圈"
+    }, {
+        id: 22195,
+        name: "坪林商圈"
+    }, {
+        id: 22199,
+        name: "幸福商圈"
+    }, {
+        id: 22205,
+        name: "金國商圈"
+    }, {
+        id: 22206,
+        name: "天台商圈"
+    }, {
+        id: 22213,
+        name: "碧潭商圈"
+    }, {
+        id: 22214,
+        name: "淡水商圈"
+    }, {
+        id: 22197,
+        name: "鴻金寶商圈"
+    }, {
+        id: 22212,
+        name: "樟樹灣商圈"
+    }, {
+        id: 22194,
+        name: "鶯歌老街商圈"
+    }, {
+        id: 22196,
+        name: "新莊夜市商圈"
+    }, {
+        id: 22200,
+        name: "板橋後站商圈"
+    }, {
+        id: 22201,
+        name: "板橋新站商圈"
+    }, {
+        id: 22202,
+        name: "中和捷運商圈"
+    }, {
+        id: 22203,
+        name: "中和積穗商圈"
+    }, {
+        id: 22204,
+        name: "永和頂溪商圈"
+    }, {
+        id: 22208,
+        name: "忠孝東路商圈"
+    }, {
+        id: 22209,
+        name: "國泰建成商圈"
+    }, {
+        id: 22211,
+        name: "明峰市場商圈"
+    }, {
+        id: 22215,
+        name: "土城延吉商圈"
+    }, {
+        id: 22418,
+        name: "三和夜市商圈"
+    }, {
+        id: 22191,
+        name: "蘆洲市廟街商圈"
+    }, {
+        id: 22193,
+        name: "瑞芳鎮九份商圈"
+    }, {
+        id: 22207,
+        name: "汐止麥當勞商圈"
+    }, {
+        id: 22210,
+        name: "大汐止百貨商圈"
+    }]
+}, {
+    regionId: 2,
+    regionName: "基隆市",
+    circles: [{
+        id: 22332,
+        name: "大武崙工業區"
+    }, {
+        id: 22220,
+        name: "哨船頭義二路商圈"
+    }]
+}, {
+    regionId: 10,
+    regionName: "彰化縣",
+    circles: [{
+        id: 22358,
+        name: "全興工業區"
+    }, {
+        id: 22359,
+        name: "芳苑工業區"
+    }, {
+        id: 22360,
+        name: "福興工業區"
+    }, {
+        id: 22361,
+        name: "埔頭工業區"
+    }, {
+        id: 22362,
+        name: "田中工業區"
+    }, {
+        id: 22363,
+        name: "彰濱工業區"
+    }, {
+        id: 22279,
+        name: "田尾商圈"
+    }, {
+        id: 22280,
+        name: "芳苑王功商圈"
+    }, {
+        id: 22277,
+        name: "永樂街形象商圈"
+    }, {
+        id: 22278,
+        name: "八卦山風景區商圈"
+    }]
+}, {
+    regionId: 23,
+    regionName: "花蓮縣",
+    circles: [{
+        id: 22330,
+        name: "光華工業區"
+    }, {
+        id: 22281,
+        name: "瑞穗鄉舞鶴商圈"
+    }, {
+        id: 22282,
+        name: "花蓮市形象商圈"
+    }]
+}, {
+    regionId: 24,
+    regionName: "澎湖縣",
+    circles: [{
+        id: 22296,
+        name: "馬公商圈"
+    }]
+}, {
+    regionId: 19,
+    regionName: "屏東縣",
+    circles: [{
+        id: 22384,
+        name: "內埔工業區"
+    }, {
+        id: 22385,
+        name: "屏東工業區"
+    }, {
+        id: 22386,
+        name: "屏南工業區"
+    }, {
+        id: 22290,
+        name: "恆春小鎮商圈"
+    }, {
+        id: 22289,
+        name: "恆春鎮墾丁商圈"
+    }]
+}, {
+    regionId: 12,
+    regionName: "嘉義市",
+    circles: [{
+        id: 22286,
+        name: "嘉義文化路商圈"
+    }, {
+        id: 22287,
+        name: "嘉義市大雅路商圈"
+    }]
+}, {
+    regionId: 22,
+    regionName: "台東縣",
+    circles: [{
+        id: 22331,
+        name: "豐樂工業區"
+    }, {
+        id: 22295,
+        name: "知本溫泉商圈"
+    }]
+}, {
+    regionId: 13,
+    regionName: "嘉義縣",
+    circles: [{
+        id: 22367,
+        name: "民雄工業區"
+    }, {
+        id: 22368,
+        name: "橋頭工業區"
+    }, {
+        id: 22369,
+        name: "朴子工業區"
+    }, {
+        id: 22370,
+        name: "義竹工業區"
+    }, {
+        id: 22371,
+        name: "嘉太工業區"
+    }, {
+        id: 22288,
+        name: "朴子市商圈"
+    }]
+}, {
+    regionId: 11,
+    regionName: "南投縣",
+    circles: [{
+        id: 22357,
+        name: "南崗及竹山工業區"
+    }, {
+        id: 22298,
+        name: "竹山鎮商圈"
+    }, {
+        id: 22299,
+        name: "鹿谷鄉商圈"
+    }, {
+        id: 22300,
+        name: "草屯鎮商圈"
+    }, {
+        id: 22301,
+        name: "國姓鄉商圈"
+    }, {
+        id: 22302,
+        name: "集集鎮商圈"
+    }, {
+        id: 22303,
+        name: "南投市商圈"
+    }, {
+        id: 22304,
+        name: "中寮鄉商圈"
+    }, {
+        id: 22305,
+        name: "水里鄉商圈"
+    }, {
+        id: 22306,
+        name: "埔里鎮商圈"
+    }, {
+        id: 22308,
+        name: "仁愛鄉商圈"
+    }, {
+        id: 22307,
+        name: "名間鄉松柏嶺商圈"
+    }]
+}, {
+    regionId: 14,
+    regionName: "雲林縣",
+    circles: [{
+        id: 22364,
+        name: "元長工業區"
+    }, {
+        id: 22365,
+        name: "豐田工業區"
+    }, {
+        id: 22366,
+        name: "斗六工業區"
+    }, {
+        id: 22319,
+        name: "中科虎尾園區"
+    }, {
+        id: 22323,
+        name: "雲林科技工業區"
+    }, {
+        id: 22297,
+        name: "北港鎮商圈"
+    }]
+}, {
+    regionId: 21,
+    regionName: "宜蘭縣",
+    circles: [{
+        id: 22328,
+        name: "龍德工業區"
+    }, {
+        id: 22329,
+        name: "利澤工業區"
+    }, {
+        id: 22293,
+        name: "礁溪商圈"
+    }, {
+        id: 22294,
+        name: "羅東商圈"
+    }, {
+        id: 22291,
+        name: "冬山鄉商圈"
+    }, {
+        id: 22292,
+        name: "蘇澳中山路商圈"
+    }]
+}, {
+    regionId: 7,
+    regionName: "苗栗縣",
+    circles: [{
+        id: 22347,
+        name: "竹南工業區"
+    }, {
+        id: 22348,
+        name: "銅鑼工業區"
+    }, {
+        id: 22349,
+        name: "頭份工業區"
+    }, {
+        id: 22350,
+        name: "中興工業區"
+    }, {
+        id: 22352,
+        name: "三義工業區"
+    }, {
+        id: 22315,
+        name: "竹科竹南基地"
+    }, {
+        id: 22351,
+        name: "廣源科技園區"
+    }, {
+        id: 22283,
+        name: "三義水美街商圈"
+    }, {
+        id: 22285,
+        name: "南庄鄉魅力商圈"
+    }, {
+        id: 22284,
+        name: "苗栗市光復路商圈"
+    }]
+}, {
+    regionId: 5,
+    regionName: "新竹縣",
+    circles: [{
+        id: 22325,
+        name: "新竹工業區"
+    }, {
+        id: 22314,
+        name: "竹科工業園區"
+    }, {
+        id: 22227,
+        name: "內灣商圈"
+    }, {
+        id: 22228,
+        name: "關西商圈"
+    }, {
+        id: 22230,
+        name: "竹北光明商圈"
+    }, {
+        id: 22229,
+        name: "北埔鄉魅力商圈"
+    }]
+}];
+
+export function getCircleList(state: State): FilterOption[] {
+    const { region, kind } = state;
+    const key = 'shopping';
+    return getFilterAllOption(key).concat(
+        ((region === "1" && kind) ? NEW_CIRCLES : CIRCLES).filter(circles => circles.regionId.toString() === region)
+            .map(circles => circles.circles).flat()
+            .map(circle => {
+                return {
+                    id: circle.id.toString(),
+                    key: key,
+                    name: circle.name
+                }
+            })
+    );
+}
