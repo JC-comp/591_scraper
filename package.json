@@ -1,0 +1,31 @@
+{
+  "name": "housing_demo",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build:tailwindcss": "npx @tailwindcss/cli -i ./src/style.css -o ./public/style.css",
+    "build:esbuild": "node esbuild.config.js",
+    "build:types": "tsc -p tsconfig.build.json",
+    "build": "npm run build:esbuild && npm run build:types && npm run build:tailwindcss",
+    "lint": "eslint src",
+    "watch": "node esbuild.config.js --watch"
+  },
+  "type": "module",
+  "author": "JC",
+  "license": "MIT",
+  "devDependencies": {
+    "@eslint/js": "^9.33.0",
+    "esbuild": "^0.25.9",
+    "eslint": "^9.33.0",
+    "eslint-config-prettier": "^10.1.8",
+    "typescript": "^5.9.2",
+    "typescript-eslint": "^8.39.1"
+  },
+  "dependencies": {
+    "@tailwindcss/cli": "^4.1.12",
+    "housing": "file:packages/housing",
+    "json-formatter-js": "^2.5.23",
+    "tailwindcss": "^4.1.12"
+  }
+}
